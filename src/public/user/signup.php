@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </button>
         </form>
         <div class="mt-4 text-center">
-            <a href="login.php" class="text-blue-500 hover:underline">ログイン画面へ</a>
+            <a href="signin.php" class="text-blue-500 hover:underline">ログイン画面へ</a>
         </div>
     </div>
 </body>
