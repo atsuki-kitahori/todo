@@ -17,7 +17,27 @@ try {
 
 $error_message = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // ログイン処理をここに実装
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+        $error_message = 'パスワードとメールアドレスを入力してください';
+    } else {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
+        // ユーザーの検証
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+
+        if ($user && password_verify($password, $user['password'])) {
+            // ログイン成功
+            $_SESSION['user_id'] = $user['id'];
+            header('Location: ../index.php');
+            exit();
+        } else {
+            // ログイン失敗
+            $error_message = 'メールアドレスまたはパスワードが違います';
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
