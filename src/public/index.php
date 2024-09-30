@@ -87,7 +87,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </header>
     <main class="container mx-auto mt-8">
-        <h2 class="text-xl font-bold mb-4">タスク一覧</h2>
         <form action="" method="get" class="mb-4">
             <div class="bg-white p-4 rounded-lg shadow-md max-w-3xl mx-auto">
                 <h3 class="text-lg font-semibold mb-2 text-left">絞り込み検索</h3>
@@ -140,6 +139,9 @@ $cat['id']
                 </div>
             </div>
         </form>
+        <div class="mb-4">
+            <a href="task/create.php" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 inline-block">タスクを追加</a>
+        </div>
         <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-gray-200">
                 <tr>
