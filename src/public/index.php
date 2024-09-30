@@ -161,9 +161,15 @@ $cat['id']
                         <td class="p-3"><?= htmlspecialchars(
                             $task['category_name'] ?? '未分類'
                         ) ?></td>
-                        <td class="p-3"><?= $task['status'] == 0
-                            ? '未完了'
-                            : '完了' ?></td>
+                        <td class="p-3">
+                            <a href="task/updateStatus.php?id=<?= $task[
+                                'id'
+                            ] ?>&status=<?= $task['status'] == 0
+    ? 1
+    : 0 ?>" class="text-blue-500 hover:underline">
+                                <?= $task['status'] == 0 ? '未完了' : '完了' ?>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
