@@ -150,6 +150,7 @@ $cat['id']
                     <th class="p-3 text-left">カテゴリー名</th>
                     <th class="p-3 text-left">完了未完了</th>
                     <th class="p-3 text-left">編集</th>
+                    <th class="p-3 text-left">削除</th>
                 </tr>
             </thead>
             <tbody>
@@ -177,6 +178,11 @@ $cat['id']
                             <a href="task/edit.php?id=<?= $task[
                                 'id'
                             ] ?>" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">編集</a>
+                        </td>
+                        <td class="p-3">
+                            <a href="task/delete.php?id=<?= $task[
+                                'id'
+                            ] ?>" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onclick="return confirm('本当に削除しますか？');">削除</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
