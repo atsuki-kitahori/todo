@@ -81,16 +81,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="category_id">
                     カテゴリー
                 </label>
-                <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category_id" name="category_id">
-                    <option value="">カテゴリーなし</option>
-                    <?php foreach ($categories as $category): ?>
-                        <option value="<?= $category[
-                            'id'
-                        ] ?>"><?= htmlspecialchars(
+                <div class="flex items-center">
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category_id" name="category_id">
+                        <option value="">カテゴリーなし</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?= $category[
+                                'id'
+                            ] ?>"><?= htmlspecialchars(
     $category['name']
 ) ?></option>
-                    <?php endforeach; ?>
-                </select>
+                        <?php endforeach; ?>
+                    </select>
+                    <a href="../category/index.php" class="ml-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline whitespace-nowrap">カテゴリーを追加</a>
+                </div>
             </div>
             <?php if (isset($_SESSION['error_messages'])): ?>
                 <?php foreach ($_SESSION['error_messages'] as $error): ?>
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     タスクを追加
                 </button>
                 <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="../index.php">
-                    キャンセル
+                    戻る
                 </a>
             </div>
         </form>
