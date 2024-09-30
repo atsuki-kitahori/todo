@@ -23,12 +23,49 @@ try {
     exit();
 }
 
-// タスクの取得
-$stmt = $pdo->prepare(
-    'SELECT tasks.*, categories.name as category_name FROM tasks LEFT JOIN categories ON tasks.category_id = categories.id WHERE tasks.user_id = ? ORDER BY tasks.deadline ASC'
-);
-$stmt->execute([$_SESSION['user_id']]);
+// フィルタリングと並べ替えの処理
+$keyword = $_GET['keyword'] ?? '';
+$category = $_GET['category'] ?? '';
+$status = $_GET['status'] ?? '';
+$sort = $_GET['sort'] ?? 'created_at_desc';
+
+$query =
+    'SELECT tasks.*, categories.name as category_name FROM tasks LEFT JOIN categories ON tasks.category_id = categories.id WHERE tasks.user_id = ?';
+$params = [$_SESSION['user_id']];
+
+if ($keyword) {
+    $query .= ' AND tasks.contents LIKE ?';
+    $params[] = "%$keyword%";
+}
+
+if ($category) {
+    $query .= ' AND tasks.category_id = ?';
+    $params[] = $category;
+}
+
+if ($status !== '') {
+    $query .= ' AND tasks.status = ?';
+    $params[] = $status;
+}
+
+switch ($sort) {
+    case 'created_at_asc':
+        $query .= ' ORDER BY tasks.created_at ASC';
+        break;
+    case 'created_at_desc':
+    default:
+        $query .= ' ORDER BY tasks.created_at DESC';
+        break;
+}
+
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
 $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// カテゴリーの取得
+$stmt = $pdo->prepare('SELECT * FROM categories WHERE user_id = ?');
+$stmt->execute([$_SESSION['user_id']]);
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -51,6 +88,58 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
     <main class="container mx-auto mt-8">
         <h2 class="text-xl font-bold mb-4">タスク一覧</h2>
+        <form action="" method="get" class="mb-4">
+            <div class="bg-white p-4 rounded-lg shadow-md max-w-3xl mx-auto">
+                <h3 class="text-lg font-semibold mb-2 text-left">絞り込み検索</h3>
+                <div class="flex flex-wrap justify-center items-center gap-4">
+                    <input type="text" name="keyword" placeholder="キーワードを入力" value="<?= htmlspecialchars(
+                        $keyword
+                    ) ?>" class="border p-2 rounded w-64">
+                    <div class="flex flex-col items-start gap-2">
+                        <div>
+                            <input type="radio" id="sort_new" name="sort" value="created_at_desc" <?= $sort ===
+                            'created_at_desc'
+                                ? 'checked'
+                                : '' ?>>
+                            <label for="sort_new">新着順</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="sort_old" name="sort" value="created_at_asc" <?= $sort ===
+                            'created_at_asc'
+                                ? 'checked'
+                                : '' ?>>
+                            <label for="sort_old">古い順</label>
+                        </div>
+                    </div>
+                    <select name="category" class="border p-2 rounded">
+                        <option value="">カテゴリ</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= $cat['id'] ?>" <?= $category ==
+$cat['id']
+    ? 'selected'
+    : '' ?>><?= htmlspecialchars($cat['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="flex flex-col items-start gap-2">
+                        <div>
+                            <input type="radio" id="status_completed" name="status" value="1" <?= $status ===
+                            '1'
+                                ? 'checked'
+                                : '' ?>>
+                            <label for="status_completed">完了</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="status_incomplete" name="status" value="0" <?= $status ===
+                            '0'
+                                ? 'checked'
+                                : '' ?>>
+                            <label for="status_incomplete">未完了</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">検索</button>
+                </div>
+            </div>
+        </form>
         <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
             <thead class="bg-gray-200">
                 <tr>
