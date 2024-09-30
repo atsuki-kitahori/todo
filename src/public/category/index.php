@@ -59,7 +59,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                     カテゴリを追加
                 </button>
-                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="../index.php">
+                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="../task/create.php">
                     戻る
                 </a>
             </div>
