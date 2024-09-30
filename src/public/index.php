@@ -149,6 +149,7 @@ $cat['id']
                     <th class="p-3 text-left">締め切り</th>
                     <th class="p-3 text-left">カテゴリー名</th>
                     <th class="p-3 text-left">完了未完了</th>
+                    <th class="p-3 text-left">編集</th>
                 </tr>
             </thead>
             <tbody>
@@ -171,6 +172,11 @@ $cat['id']
     : 0 ?>" class="text-blue-500 hover:underline">
                                 <?= $task['status'] == 0 ? '未完了' : '完了' ?>
                             </a>
+                        </td>
+                        <td class="p-3">
+                            <a href="task/edit.php?id=<?= $task[
+                                'id'
+                            ] ?>" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">編集</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
